@@ -1,0 +1,27 @@
+import boto3
+
+def lambda_handler(event, context):
+    # Initialize DynamoDB and SNS clients
+    dynamodb = boto3.client('dynamodb')
+    sns = boto3.client('sns')
+
+    # Retrieve email addresses from DynamoDB
+    response = dynamodb.scan(
+        TableName='marketing'
+    )
+
+    # Extract email addresses from DynamoDB response
+    email_addresses = [item['EmailAddress'] for item in response['Items']]
+    user_name = [item['UserId'] for item in response['Items']]
+
+    # Send SNS message to each email address
+    for user in user_name:
+        sns.publish(
+            TopicArn='arn:aws:sns:ap-south-1:672149054536:marketing',
+            Message=f'Hi {user}! New offer unlocked Shop now with 50% off!.'
+        )
+
+    return {
+        'statusCode': 200,
+        'body': 'SNS emails sent successfully.'
+    }
