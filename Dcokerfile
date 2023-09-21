@@ -1,5 +1,5 @@
 # Use an Ubuntu base image
-FROM ubuntu:latest
+FROM nginx
 
 # Update the package list and install apache
 RUN apt-get update && apt-get install apache2 -y
