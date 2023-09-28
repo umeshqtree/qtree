@@ -1,5 +1,6 @@
 ---
 - name: Reboot system
+  become: yes
   hosts: all
   tasks:
     - name: Reboot if kernel upgraded
