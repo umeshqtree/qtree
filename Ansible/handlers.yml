@@ -1,6 +1,6 @@
 ---
 - name: Example playbook with handlers
-  hosts: webservers
+  hosts: servergroup
   become: yes
   tasks:
     - name: install nginx
