@@ -1,12 +1,12 @@
 pipeline {
     agent any
     parameters {
-        choice(name: 'host-group', choices: ['amazon', 'ubuntu'], description: 'Select host-group')
+        choice(name: 'host_group', choices: ['jenkins', 'jenkins_qa'], description: 'Select host-group')
         choice(name: 'palybook', choices: ['handlers', 'setup'], description: 'Select palybook')
     }
     environment {
         GIT_REPO_URL = "https://github.com/umeshqtree/qtree.git"
-        ANSIBLE_DIR = "/var/lib/jenkins/workspace/ansible/qtree/Ansible/"
+        ANSIBLE_DIR = "/var/lib/jenkins/workspace/ansible/Ansible"
     }
     stages{
      stage('Git Checkout') {
@@ -24,7 +24,7 @@ pipeline {
     stage('Update node group-name') {
             steps {
                 dir("${env.ANSIBLE_DIR}") {
-                    sh "sed -i 's/servergroup/${params.host-group}/' ${params.palybook}.yml"
+                    sh "sed -i 's/servergroup/${params.host_group}/' ${params.palybook}.yml"
                 }
             }
         }   
