@@ -1,7 +1,7 @@
 ---
 - name: Qtree server Setup
   become: yes
-  hosts: all
+  hosts: servergroup
   tasks:
     - name: Create an application user
       user:
