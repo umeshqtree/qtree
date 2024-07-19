@@ -1,0 +1,10 @@
+---
+- name: Software installation
+  hosts: ubuntu
+  tasks:
+      - name: install nginx
+        apt: name=apache2 state=latest
+      - name: start nginx service
+        service:
+            name: apache2
+            state: started

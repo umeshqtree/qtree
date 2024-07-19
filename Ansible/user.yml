@@ -5,7 +5,7 @@
   tasks:
     - name: Create an application user
       user:
-        name: infy
+        name: wipro
         password: test123
     - name: Create application file
       file:
