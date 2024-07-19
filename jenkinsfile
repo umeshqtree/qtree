@@ -1,8 +1,10 @@
 pipeline {
     agent any
     parameters {
-        choice(name: 'host_group', choices: ['jenkins', 'jenkins_qa'], description: 'Select host-group')
-        choice(name: 'palybook', choices: ['handlers', 'setup'], description: 'Select palybook')
+        string(name: 'host_group', defaultValue: 'jenkins_qa', description: 'Enter Pipeline Name')
+        string(name: 'palybook', defaultValue: 'user', description: 'Enter Pipeline Name')
+        //choice(name: 'host_group', choices: ['jenkins', 'jenkins_qa'], description: 'Select host-group')
+       // choice(name: 'palybook', choices: ['handlers', 'setup', 'user'], description: 'Select palybook')
     }
     environment {
         GIT_REPO_URL = "https://github.com/umeshqtree/qtree.git"
