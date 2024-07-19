@@ -2,7 +2,8 @@ pipeline {
     agent any
     parameters {
         string(name: 'host_group', defaultValue: 'jenkins_qa', description: 'Enter Pipeline Name')
-        string(name: 'palybook', defaultValue: 'install', description: 'Enter Pipeline Name')
+        string(name: 'palybook_1', defaultValue: 'install', description: 'Enter Pipeline Name')
+        string(name: 'palybook_2', defaultValue: 'user', description: 'Enter Pipeline Name')
         //choice(name: 'host_group', choices: ['jenkins', 'jenkins_qa'], description: 'Select host-group')
        // choice(name: 'palybook', choices: ['handlers', 'setup', 'user'], description: 'Select palybook')
     }
@@ -30,12 +31,19 @@ pipeline {
                 }
             }
         }   
-    stage('Execute playbook') {
+    stage('Execute playbook-1') {
             steps {
                 dir("${env.ANSIBLE_DIR}") {
-                    sh "ansible-playbook -i hosts ${params.palybook}.yml"
+                    sh "ansible-playbook -i hosts ${params.palybook_1}.yml"
                 }
             }
         }  
+        stage('Execute playbook-2') {
+            steps {
+                dir("${env.ANSIBLE_DIR}") {
+                    sh "ansible-playbook -i hosts ${params.palybook_2}.yml"
+                }
+            }
+        }
 }
 }
