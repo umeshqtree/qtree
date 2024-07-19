@@ -1,0 +1,49 @@
+pipeline {
+    agent any
+    parameters {
+        string(name: 'host_group', defaultValue: 'jenkins_qa', description: 'Enter Pipeline Name')
+        string(name: 'palybook_1', defaultValue: 'install', description: 'Enter Pipeline Name')
+        string(name: 'palybook_2', defaultValue: 'user', description: 'Enter Pipeline Name')
+        //choice(name: 'host_group', choices: ['jenkins', 'jenkins_qa'], description: 'Select host-group')
+       // choice(name: 'palybook', choices: ['handlers', 'setup', 'user'], description: 'Select palybook')
+    }
+    environment {
+        GIT_REPO_URL = "https://github.com/umeshqtree/qtree.git"
+        ANSIBLE_DIR = "/var/lib/jenkins/workspace/ansible/Ansible"
+    }
+    stages{
+     stage('Git Checkout') {
+            steps {
+                checkout([$class: 'GitSCM', branches: [[name: '*/master']], userRemoteConfigs: [[url: env.GIT_REPO_URL]]])
+            }
+        }
+    stage('Update Pem permission') {
+            steps {
+                dir("${env.ANSIBLE_DIR}") {
+                    sh 'chmod 400 qTree_key.pem'
+                }
+            }
+        }  
+    stage('Update node group-name') {
+            steps {
+                dir("${env.ANSIBLE_DIR}") {
+                    sh "sed -i 's/servergroup/${params.host_group}/' ${params.palybook}.yml"
+                }
+            }
+        }   
+    stage('Execute playbook-1') {
+            steps {
+                dir("${env.ANSIBLE_DIR}") {
+                    sh "ansible-playbook -i hosts ${params.palybook_1}.yml"
+                }
+            }
+        }  
+        stage('Execute playbook-2') {
+            steps {
+                dir("${env.ANSIBLE_DIR}") {
+                    sh "ansible-playbook -i hosts ${params.palybook_2}.yml"
+                }
+            }
+        }
+}
+}
